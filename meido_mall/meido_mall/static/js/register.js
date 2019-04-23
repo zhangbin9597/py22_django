@@ -62,7 +62,7 @@ var vm = new Vue({
                 this.error_name = false;
             } else {
                 this.error_name_message = '请输入5-20个字符的用户名';
-                this.error_name = true;
+                this.error_name = true ;
             }
             // 检查重名
             if (this.error_name == false) {

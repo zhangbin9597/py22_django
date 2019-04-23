@@ -13,7 +13,7 @@
 <body>
 <div class="register_con">
     <div class="l_con fl">
-        <a href="../static/index.html" class="reg_logo"><img src="{{ static("images/logo.png") }}"></a>
+        <a href="index.html" class="reg_logo"><img src="{{ static("images/logo.png") }}"></a>
         <div class="reg_slogan">商品美 · 种类多 · 欢迎光临</div>
         <div class="reg_banner"></div>
     </div>
@@ -25,6 +25,7 @@
         </div>
         <div class="reg_form clearfix" id="app" v-cloak>
             <form method="post" class="register_form" @submit="on_submit">
+                {{ csrf_input }}
                 <ul>
                     <li>
                         <label>用户名:</label>
@@ -49,7 +50,7 @@
                     <li>
                         <label>图形验证码:</label>
                         <input type="text" name="pic_code" id="pic_code" class="msg_input" v-model="image_code" @blur="check_image_code">
-                        <img :src="image_code_url" alt="图形验证码" class="pic_code">
+                        <img :src="image_code_url" alt="图形验证码" class="pic_code" @click="generate_image_code">
                         <span class="error_tip" v-show="error_image_code">[[ error_image_code_message ]]</span>
                     </li>
                     <li>
