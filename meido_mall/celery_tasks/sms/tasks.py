@@ -17,9 +17,9 @@ def send_sms(self, to, datas, tempid):
     :return: 成功0 或者 失败-1
     """
     try:
-        # ccp = CCP()
-        # ret = ccp().send_template_sms(to,datas,1)
+        ccp = CCP()
+        ret = ccp.send_template_sms(to,datas,tempid)
         print(datas[0])
     except Exception as e:
         self.retry(exc=e, max_retries= 3 )
-
+    return ret
