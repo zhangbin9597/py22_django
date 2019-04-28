@@ -1,13 +1,17 @@
+import json
 import re
 from django import http
 from django.contrib.auth import login,authenticate,logout
 from django.urls import reverse
-
+from django.conf import settings
 from users.models import User
 from django.shortcuts import render,redirect
 from django.views import View
 from meido_mall.utils.response_code import RETCODE
 from django.contrib.auth.mixins import LoginRequiredMixin
+from celery_tasks.mail.tasks import send_user_email
+from meido_mall.utils import meiduo_signature
+from . import contants
 # Create your views here.
 
 
@@ -144,6 +148,72 @@ class LogoutView(View):
 class UserInfoView(LoginRequiredMixin, View):
     def get(self,request):
         # if request.user.is_authenticated:
-        return render(request,'user_center_info.html')
+        # return render(request,'user_center_info.html')
         # else:
         #     return redirect('/login/')
+    # 获取当前登录的用户
+        user = request.user
+        context={
+            'username':user.username,
+            'mobile':user.mobile,
+            'email':user.email,
+            'email_active':user.email_active
+        }
+        return render(request, 'user_center_info.html',context)
+
+class EmailView(LoginRequiredMixin, View):
+    def put(self,request):
+        #接收,以put方式的请求
+        dict1 = json.loads(request.body.decode())
+        email = dict1.get('email')
+        # 验证
+        if not all([email]):
+            return http.JsonResponse({
+                'code':RETCODE.PARAMERR,
+                'errmsg':'没有邮箱参数'
+            })
+        if not re.match('^[a-z0-9][\w\.\-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}$',email):
+            return http.JsonResponse({
+                'code':RETCODE.PARAMERR,
+                'errmsg':'邮箱格式错误'
+            })
+        #处理
+        #修改属性
+        user = request.user
+        user.email = email
+        user.save()
+        #发邮件
+        token = meiduo_signature.dumps({'user_id':user.id},contants.EMAIL_EXPIRES)
+        verify_url = settings.EMAIL_VERIFY_URL + '?token=%s'% token
+        send_user_email.delay(email,verify_url)
+
+        #响应
+        return http.JsonResponse({
+            'code':RETCODE.OK,
+            'errmsg':'OK'
+        })
+class EmailverifyView(View):
+    def get(self,request):
+        # 接收
+        token = request.GET.get('token')
+        #验证
+        dict1 = meiduo_signature.loads(token,contants.EMAIL_EXPIRES)
+        if dict1 is None:
+            return http.HttpResponseBadRequest('激活信息无效,请重新发邮件')
+        user_id = dict1.get('user_id')
+
+        #处理
+        try:
+            user = User.objects.get(pk=user_id)
+        except:
+            return http.HttpResponseBadRequest('激活信息无效')
+        else:
+            user.email_active = True
+            user.save()
+        #响应
+        return redirect('/info/')
+
+class AddressView(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'user_center_site.html')
+

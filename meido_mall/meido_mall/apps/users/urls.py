@@ -13,4 +13,7 @@ urlpatterns = [
     #验证是否登录的装饰器
     # url(r'^info/$',login_required(views.UserInfoView.as_view())),
     url(r'^info/$',views.UserInfoView.as_view()),
+    url(r'^emails/$',views.EmailView.as_view()),
+    url(r'^emails/verification/$',views.EmailverifyView.as_view()),
+    url(r'^addresses/$',views.AddressView.as_view()),
 ]

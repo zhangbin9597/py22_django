@@ -79,7 +79,7 @@ class SmscodeView(View):
         # ccp = CCP()
         # ret = ccp.send_template_sms(mobile, [sms_code, contants.SMS_CODE_EXPIRES / 60], 1)
         print(sms_code)
-        send_sms.delay(mobile, [sms_code, contants.SMS_CODE_EXPIRES / 60], 1)
+        # send_sms.delay(mobile, [sms_code, contants.SMS_CODE_EXPIRES / 60], 1)
 
         #响应
         return http.JsonResponse({
