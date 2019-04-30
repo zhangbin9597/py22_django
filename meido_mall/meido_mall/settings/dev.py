@@ -246,4 +246,14 @@ EMAIL_PORT = 25 # 发邮件端口
 EMAIL_HOST_USER = 'hmmeiduo@163.com' # 授权的邮箱
 EMAIL_HOST_PASSWORD = 'hmmeiduo123' # 邮箱授权时获得的密码，非注册登录密码
 EMAIL_FROM = '美多商城<hmmeiduo@163.com>' # 发件人抬头
+
+# EMAIL_HOST = 'smtp.qq.com ' # 发邮件主机
+# EMAIL_PORT = 465 # 发邮件端口
+# EMAIL_HOST_USER = '695629154@qq.com' # 授权的邮箱
+# EMAIL_HOST_PASSWORD = 'zsjtkomqdjeebccg' # 邮箱授权时获得的密码，非注册登录密码
+# EMAIL_FROM = '张斌<695629154@qq.com>' # 发件人抬头
+# qq邮箱此值为True，aliyun此值为False，163可以忽略此值
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = True
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_VERIFY_URL = 'http://www.meiduo.site:8000/emails/verification/'
