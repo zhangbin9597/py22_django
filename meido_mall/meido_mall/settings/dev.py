@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'verifications.apps.VerificationsConfig',
     'oauth.apps.OauthConfig',
     'areas.apps.AreasConfig',
+    'contents.apps.ContentsConfig',
+    'goods.apps.GoodsConfig',
 ]
 
 MIDDLEWARE = [
@@ -257,3 +259,8 @@ EMAIL_FROM = '美多商城<hmmeiduo@163.com>' # 发件人抬头
 # EMAIL_USE_SSL = True
 # DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_VERIFY_URL = 'http://www.meiduo.site:8000/emails/verification/'
+
+# 访问fdfs文件的域名
+FDFS_URL = 'http://image.meiduo.site:8888/'
+# 指定存储类型
+DEFAULT_FILE_STORAGE = 'meido_mall.utils.storage.FdfsStorage'

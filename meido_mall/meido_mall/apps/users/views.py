@@ -63,9 +63,7 @@ class register(View):
         # return redirect('/index.html')
         # return redirect(reverse('users:index'))
 
-class IndexView(View):
-    def get(self,request):
-        return render(request, 'index.html')
+
 
 
 class UsernameCountView(View):
