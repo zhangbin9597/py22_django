@@ -26,10 +26,12 @@ var vm = new Vue({
         },
         cart_total_count: 0, // 购物车总数量
         carts: [], // 购物车数据,
+        username:'',
     },
     mounted(){
 		// 获取热销商品数据
         this.get_hot_goods();
+        this.username=getCookie('username');
 
         // 保存用户浏览记录
 		this.save_browse_histories();

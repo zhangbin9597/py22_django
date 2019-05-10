@@ -1,0 +1,2 @@
+# 过期时间
+OPENID_EXPIRES = 60*10
