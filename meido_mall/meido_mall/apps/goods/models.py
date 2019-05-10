@@ -163,6 +163,7 @@ class SKUSpecification(BaseModel):
     def __str__(self):
         return '%s: %s - %s' % (self.sku, self.spec.name, self.option.value)
 
+<<<<<<< HEAD
 class GoodsVisitCount(BaseModel):
     """统计分类商品访问量模型类"""
     category = models.ForeignKey(GoodsCategory, on_delete=models.CASCADE, verbose_name='商品分类')
@@ -174,3 +175,5 @@ class GoodsVisitCount(BaseModel):
         verbose_name = '统计分类商品访问量'
         verbose_name_plural = verbose_name
 
+=======
+>>>>>>> 6488497d5a2fb2670b8a2f99d02f4a0d40424eb9

@@ -4,6 +4,8 @@ from django.views import View
 from django_redis import get_redis_connection
 from meido_mall.utils.meido_category import get_category
 from .models import GoodsCategory,SKU,GoodsVisitCount
+from meido_mall.utils.meido_category import get_category
+from .models import GoodsCategory,SKU
 from django.core.paginator import Paginator
 from . import constants
 from django import http
@@ -14,7 +16,9 @@ from meido_mall.utils.breadcrumb import get_breadcrumb
 from datetime import datetime
 import json
 
-class ListView(View):
+
+class ListView(LoginRequiredMixin,View):
+
     def get(self,request,category_id,page_num):
         # 查询第三级分类对象
         try:
@@ -44,6 +48,9 @@ class ListView(View):
         paginator = Paginator(skus,constants.LIST_PER_PAGE)
         # 获取指定页的数据
         page_skus = paginator.page(page_num)
+
+
+
 
         context={
 
@@ -113,7 +120,7 @@ class DetailView(View):
         # print(sku_option_dict)
         # sku==>spu==>规格===>选项
         specs = spu.specs.all()
-        # print(specs)
+
         specs_list=[]
         for index,spec in enumerate(specs):
             # 转换规格数据
@@ -130,7 +137,8 @@ class DetailView(View):
                 }
                 #复制当前库存商品的选项
                 sku_option_list_temp = sku_option_list[:]
-                # print(sku_option_list_temp)
+
+
                 # 当前选项是否选中
                 if option.id in sku_option_list:
                     option_dict['selected'] = True
@@ -143,7 +151,7 @@ class DetailView(View):
                 spec_dict['options'].append(option_dict)
             # 添加规格数据
             specs_list.append(spec_dict)
-            # print(spec_dict)
+
         # 渲染页面
         context = {
             'categories':categories,
@@ -154,6 +162,7 @@ class DetailView(View):
             'specs':specs_list,
         }
         return render(request,'detail.html',context)
+
 
 class DetailVisitView(View):
     def post(self,request,category_id):
@@ -239,3 +248,4 @@ class HistoryView(View):
             'code':RETCODE.OK,
             'errmsg':'ok',
         })
+
