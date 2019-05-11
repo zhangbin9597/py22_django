@@ -63,9 +63,6 @@ class register(View):
         # return redirect('/index.html')
         # return redirect(reverse('users:index'))
 
-
-
-
 class UsernameCountView(View):
     def get(self, request, username):
         # 接收

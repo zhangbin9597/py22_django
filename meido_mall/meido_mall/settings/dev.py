@@ -181,7 +181,6 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
-<<<<<<< HEAD
     "history": {  # 用户浏览记录
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379/3",
@@ -189,8 +188,6 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
-=======
->>>>>>> 6488497d5a2fb2670b8a2f99d02f4a0d40424eb9
 }
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "session"
@@ -290,8 +287,5 @@ HAYSTACK_CONNECTIONS = {
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 # 搜索页每页显示几条数据
-<<<<<<< HEAD
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 4
-=======
-HAYSTACK_SEARCH_RESULTS_PER_PAGE = 2
->>>>>>> 6488497d5a2fb2670b8a2f99d02f4a0d40424eb9
+
