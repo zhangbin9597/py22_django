@@ -9,6 +9,8 @@ from django.contrib.auth import login
 from meido_mall.utils import meiduo_signature
 from . import contants
 from users.models import User
+from carts.utils import merge_carts_cookie_to_redis
+
 # Create your views here.
 
 
@@ -104,5 +106,6 @@ class QQopenidView(View):
         login(request,user)
         #响应
         response = redirect(next_url)
+        response = merge_carts_cookie_to_redis(request,response)
         response.set_cookie('username',user.username,max_age=60*60*24*14)
         return response

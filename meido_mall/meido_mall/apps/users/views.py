@@ -12,6 +12,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from celery_tasks.mail.tasks import send_user_email
 from meido_mall.utils import meiduo_signature
 from . import contants
+from carts.utils import merge_carts_cookie_to_redis
+
 
 # Create your views here.
 
@@ -57,6 +59,7 @@ class register(View):
         login(request,user)
         # 向cookie中输出用户名,用于在前端提示登录状态
         response = redirect(next_url)
+        response = merge_carts_cookie_to_redis(request,response)
         response.set_cookie('username',user.username,max_age=60 * 60 *24 *14)
         return response
         # 响应
@@ -127,6 +130,7 @@ class LoginView(View):
             login(request,user)
             # 向cookie中输出用户名,用于在前端提示登录状态
             response = redirect(next_url)
+            response = merge_carts_cookie_to_redis(request, response)
             response.set_cookie('username',user.username,max_age=60 * 60 * 24 * 14)
             return response
             # 设置状态保存的周期
