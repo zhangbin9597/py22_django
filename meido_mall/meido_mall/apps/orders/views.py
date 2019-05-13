@@ -58,3 +58,6 @@ class OrderSettlementView(LoginRequiredMixin, View):
         }
         return render(request, 'place_order.html', context)
 
+class OrderCommitView(LoginRequiredMixin, View):
+    def post(self, request):
+        pass
