@@ -17,7 +17,7 @@ from datetime import datetime
 import json
 
 
-class ListView(LoginRequiredMixin,View):
+class ListView(View):
 
     def get(self,request,category_id,page_num):
         # 查询第三级分类对象
