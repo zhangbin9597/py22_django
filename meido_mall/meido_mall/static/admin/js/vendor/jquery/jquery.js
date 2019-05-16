@@ -3796,12 +3796,12 @@ Data.prototype = {
 
 		} else {
 
-			// Support array or space separated string of keys
+			// Support array or space separated string of alipay
 			if ( jQuery.isArray( key ) ) {
 
-				// If "name" is an array of keys...
+				// If "name" is an array of alipay...
 				// When data is initially created, via ("key", "val") signature,
-				// keys will be converted to camelCase.
+				// alipay will be converted to camelCase.
 				// Since there is no way to tell _how_ a key was added, remove
 				// both plain key and camelCase key. #12786
 				// This will only penalize the array argument path.
@@ -6675,7 +6675,7 @@ function propFilter( props, specialEasing ) {
 			value = hooks.expand( value );
 			delete props[ name ];
 
-			// Not quite $.extend, this won't overwrite existing keys.
+			// Not quite $.extend, this won't overwrite existing alipay.
 			// Reusing 'index' because we have the correct "name"
 			for ( index in value ) {
 				if ( !( index in props ) ) {
@@ -8198,7 +8198,7 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 		// Work with a copy of dataTypes in case we need to modify it for conversion
 		dataTypes = s.dataTypes.slice();
 
-	// Create converters map with lowercased keys
+	// Create converters map with lowercased alipay
 	if ( dataTypes[ 1 ] ) {
 		for ( conv in s.converters ) {
 			converters[ conv.toLowerCase() ] = s.converters[ conv ];

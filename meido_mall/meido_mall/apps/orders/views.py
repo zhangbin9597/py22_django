@@ -191,11 +191,9 @@ class OrderInfoView(LoginRequiredMixin,View):
     def get(self, request, page_num):
         # 查询当前用户的所有订单
         order_list = OrderInfo.objects.filter(user_id=request.user.id).order_by('-create_time')
-
         # 分页
         paginator = Paginator(order_list, 2)
         page = paginator.page(page_num)
-
         # 转换成前端需要的格式
         page_list = []
         for order in page:
@@ -225,3 +223,84 @@ class OrderInfoView(LoginRequiredMixin,View):
         }
 
         return render(request, 'user_center_order.html', context)
+
+class CommentVIew(LoginRequiredMixin,View):
+    def get(self,request):
+        #接收
+        order_id = request.GET.get('order_id')
+        #验证
+        try:
+            order = OrderInfo.objects.get(pk=order_id)
+        except:
+            return render(request,'404.html')
+        #处理:查询订单中的商品
+        skus = order.skus.filter(is_commented=False)
+        sku_list=[]
+        for detail in skus:
+            sku_list.append({
+                'order_id':order_id,
+                'sku_id':detail.sku.id,
+                'default_image_url':detail.sku.default_image.url,
+                'name':detail.sku.name,
+                'price':str(detail.price)
+            })
+        #响应
+        context = {'skus':sku_list}
+        return render(request,'goods_judge.html',context)
+
+    def post(self,request):
+        #接收
+        param_dict = json.loads(request.body.decode())
+        order_id = param_dict.get('order_id')
+        sku_id = param_dict.get('sku_id')
+        comment = param_dict.get('comment')
+        score = param_dict.get('score')
+        is_anonymous = param_dict.get('is_anonymous')
+
+        #验证
+        if not all([order_id,sku_id,comment,score]):
+            return http.JsonResponse({
+                'code':RETCODE.PARAMERR,
+                'errmsg':'参数不完整'
+            })
+        #订单商品是否存在
+        try:
+            order_goods = OrderGoods.objects.get(order_id=order_id,sku_id=sku_id)
+        except:
+            return http.JsonResponse({
+                'code':RETCODE.PARAMERR,
+                'errmsg':'不存在此订单商品对象'
+            })
+
+        #处理
+        # 1.保存订单商品的评论信息
+        order_goods.comment = comment
+        order_goods.score = score
+        order_goods.is_anonymous = is_anonymous
+        order_goods.is_commented = True
+        order_goods.save()
+        # 2.修改订单商品的状态
+        # 一个订单可以包含多个商品，所有商品都评论后，则修改订单状态
+        order = order_goods.order
+        if order.skus.filter(is_commented=False).count() <= 0:
+            order.status = 5
+            order.save()
+
+        #响应
+        return http.JsonResponse({'code':RETCODE.OK,'errmsg':'ok'})
+
+class CommentListView(LoginRequiredMixin,View):
+    def get(self,request,sku_id):
+        comments = OrderGoods.objects.filter(sku_id=sku_id,is_commented=True).order_by('-create_time')
+        comment_list=[]
+        for comment in comments:
+            comment_list.append({
+                'username':'匿名用户' if comment.is_anonymous else comment.order.user.username,
+                'score':comment.score,
+                'comment':comment.comment
+            })
+        return http.JsonResponse({
+            'code': RETCODE.OK,
+            'errmsg': '',
+            'goods_comment_list': comment_list
+        })

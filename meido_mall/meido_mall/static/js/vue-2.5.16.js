@@ -269,7 +269,7 @@ var no = function (a, b, c) { return false; };
 var identity = function (_) { return _; };
 
 /**
- * Generate a static keys string from compiler modules.
+ * Generate a static alipay string from compiler modules.
  */
 function genStaticKeys (modules) {
   return modules.reduce(function (keys, m) {
@@ -555,7 +555,7 @@ if (typeof Set !== 'undefined' && isNative(Set)) {
   // use native Set when available.
   _Set = Set;
 } else {
-  // a non-standard Set polyfill that only works with primitive keys.
+  // a non-standard Set polyfill that only works with primitive alipay.
   _Set = (function () {
     function Set () {
       this.set = Object.create(null);
@@ -869,7 +869,7 @@ function toggleObserving (value) {
 /**
  * Observer class that is attached to each observed
  * object. Once attached, the observer converts the target
- * object's property keys into getter/setters that
+ * object's property alipay into getter/setters that
  * collect dependencies and dispatch updates.
  */
 var Observer = function Observer (value) {
@@ -3319,7 +3319,7 @@ function initState (vm) {
 function initProps (vm, propsOptions) {
   var propsData = vm.$options.propsData || {};
   var props = vm._props = {};
-  // cache prop keys so that future props updates can iterate using Array
+  // cache prop alipay so that future props updates can iterate using Array
   // instead of dynamic object key enumeration.
   var keys = vm.$options._propKeys = [];
   var isRoot = !vm.$parent;
@@ -5860,7 +5860,7 @@ function createPatchFunction (backend) {
       if (isDef(key)) {
         if (seenKeys[key]) {
           warn(
-            ("Duplicate keys detected: '" + key + "'. This may cause an update error."),
+            ("Duplicate alipay detected: '" + key + "'. This may cause an update error."),
             vnode.context
           );
         } else {
@@ -9963,7 +9963,7 @@ var keyNames = {
   tab: 'Tab',
   enter: 'Enter',
   space: ' ',
-  // #7806: IE11 uses key names without `Arrow` prefix for arrow keys.
+  // #7806: IE11 uses key names without `Arrow` prefix for arrow alipay.
   up: ['Up', 'ArrowUp'],
   left: ['Left', 'ArrowLeft'],
   right: ['Right', 'ArrowRight'],
@@ -10258,7 +10258,7 @@ function genFor (
   ) {
     state.warn(
       "<" + (el.tag) + " v-for=\"" + alias + " in " + exp + "\">: component lists rendered with " +
-      "v-for should have explicit keys. " +
+      "v-for should have explicit alipay. " +
       "See https://vuejs.org/guide/list.html#key for more info.",
       true /* tip */
     );

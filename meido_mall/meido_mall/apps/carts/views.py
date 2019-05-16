@@ -106,7 +106,7 @@ class CartView(View):
             cart_dict = meiduo_json.loads(cart_str)
 
         # 查询库存商品，转换成前端需要的格式
-        # cart_dict.keys()====>[1,2,3] select * from sku where id in [1,2,3]
+        # cart_dict.alipay()====>[1,2,3] select * from sku where id in [1,2,3]
         skus = SKU.objects.filter(pk__in=cart_dict.keys())  # []
         sku_list = []
         for sku in skus:
