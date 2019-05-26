@@ -34,8 +34,18 @@ class UsernameMobileAuthBackend(ModelBackend):
         :param kwargs: 其他参数
         :return: user
         """
+        # 判断是否是后台请求
+        if request is None:
+            try:
+                user = User.objects.get(username=username,is_superuser=True)
+            except:
+                return None
+            #判断密码
+            if user.check_password(password):
+                return user
         # 根据传入的username获取user对象。username可以是手机号也可以是账号
         user = get_user_by_account(username)
         # 校验user是否存在并校验密码是否正确
         if user and user.check_password(password):
             return user
+

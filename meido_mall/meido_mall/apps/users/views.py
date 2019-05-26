@@ -116,7 +116,7 @@ class LoginView(View):
         # 判断密码是否是8-20个数字
         if not re.match(r'^[0-9A-Za-z]{8,20}$', pwd):
             return http.HttpResponseForbidden('密码最少8位，最长20位')
-        user = authenticate(username=username, password=pwd)
+        user = authenticate(request, username=username, password=pwd)
         if remembered != 'on':
             # 没有记住用户:浏览器会话结束就过期
             request.session.set_expiry(0)

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 import sys
+import datetime
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0,os.path.join(BASE_DIR,'apps'))
@@ -27,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'www.meiduo.site',
+    '127.0.0.1',
 ]
 
 
@@ -48,12 +50,15 @@ INSTALLED_APPS = [
     'carts.apps.CartsConfig',
     'orders.apps.OrdersConfig',
     'payment.apps.PaymentConfig',
+    'meiduo_admin.apps.MeiduoAdminConfig',
 
     'haystack',# 全文检索
     'django_crontab',#定时任务
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -101,16 +106,29 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'meido_mall.wsgi.application'
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # 数据库引擎
         'HOST': '127.0.0.1', # 数据库主机
         'PORT': 3306, # 数据库端口
-        'USER': 'root', # 数据库用户名
-        'PASSWORD': 'mysql', # 数据库用户密码
+        'USER': 'zhangbin', # 数据库用户名
+        'PASSWORD': '123456', # 数据库用户密码
         'NAME': 'meido_mall' # 数据库名字
     },
+    'slave': {
+            'ENGINE': 'django.db.backends.mysql', # 数据库引擎
+            'HOST': '127.0.0.1', # 数据库主机
+            'PORT': 8306, # 数据库端口
+            'USER': 'root', # 数据库用户名
+            'PASSWORD': 'mysql', # 数据库用户密码
+            'NAME': 'meido_mall' # 数据库名字
+        },
 }
+
+#配置数据库读写路由
+DATABASE_ROUTERS = ['meido_mall.utils.db_router.MasterSlaveDBRouter']
+
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -161,6 +179,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 # 配置静态文件加载路径
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+# 配置收集静态文件存放的目录
+STATIC_ROOT = '/home/python/Desktop/meiduo/py22_django/static'
+
 
 # 缓存
 CACHES = {
@@ -313,3 +334,28 @@ CRONJOBS = [
      '>> ' + os.path.join(os.path.dirname(BASE_DIR), 'logs/crontab.log')),
 ]
 CRONTAB_COMMAND_PREFIX = 'LANG_ALL=zh_cn.UTF-8'  # 执行的方法中如果出现中文 ，必须指定这项配置
+
+# CORS
+CORS_ORIGIN_WHITELIST = (
+    u'http://127.0.0.1:8080',
+    u'http://127.0.0.1:8000',
+    u'http://localhost:8080',
+    u'http://www.meiduo.site:8080',
+    u'http://api.meiduo.site:8000'
+)
+CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
+CORS_ORIGIN_ALLOW_ALL = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+}
+# JWT配置
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'meiduo_admin.utils.jwt_response_payload_handler',
+}
+
