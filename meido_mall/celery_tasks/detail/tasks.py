@@ -82,11 +82,11 @@ def generate_static_detail_html(sku_id):
         'specs': specs_list,
     }
     response = render(None, 'detail.html', context)
-    html_str = response.content.decode()
+    # html_str = response.content.decode()
     file_path = os.path.join(settings.BASE_DIR, 'static/details/%d.html' % sku.id)
-    print(file_path)
+    # print(file_path)
     with open(file_path, 'w') as f1:
-        f1.write(html_str)
+        f1.write(response.content.decode())
 
 
 

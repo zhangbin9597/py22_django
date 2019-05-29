@@ -359,3 +359,6 @@ JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'meiduo_admin.utils.jwt_response_payload_handler',
 }
 
+# fastDFS客户端路径
+FASTDFS_PATH=os.path.join(BASE_DIR,'utils/fdfs/client.conf')
+
