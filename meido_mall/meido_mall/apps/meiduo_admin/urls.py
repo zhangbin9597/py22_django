@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from rest_framework_jwt.views import obtain_jwt_token
-from .views import statistical,users,specs,images
+from .views import statistical,users,specs,images,skus
 from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
@@ -17,7 +17,8 @@ urlpatterns = [
     url(r'^goods/simple/$',specs.SPUSpecView.as_view({'get':'simple'})),
     #图片
     url(r'^skus/simple/$',images.ImageView.as_view({'get':'simple'})),
-
+    #sku
+    url(r'^goods/(?P<pk>\d+)/specs/$',skus.SKUView.as_view({'get':'specs'})),
 ]
 #商品
 routers = DefaultRouter()
@@ -26,4 +27,8 @@ urlpatterns += routers.urls
 #图片管理
 routers = DefaultRouter()
 routers.register('skus/images',images.ImageView,base_name='images')
+urlpatterns += routers.urls
+#图片管理
+routers = DefaultRouter()
+routers.register('skus',skus.SKUView,base_name='skus')
 urlpatterns += routers.urls
